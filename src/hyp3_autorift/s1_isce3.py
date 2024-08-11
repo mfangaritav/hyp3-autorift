@@ -48,8 +48,9 @@ def process_burst_sentinel1_with_isce3(burst_granule_ref, burst_granule_sec):
     download_dem(bounds)
 
     orbit_file_ref = fetch_for_scene(granule_ref, dir='./')
-
+    orbit_file_ref = orbit_file_ref.name
     orbit_file_sec = fetch_for_scene(granule_sec, dir='./')
+    orbit_file_sec = orbit_file_sec.name
 
     burst_ids_ref = get_burst_ids(safe_ref, burst_granule_ref, orbit_file_ref)
     burst_ids_sec = get_burst_ids(safe_sec, burst_granule_sec, orbit_file_sec)
@@ -84,8 +85,8 @@ def process_burst_sentinel1_with_isce3(burst_granule_ref, burst_granule_sec):
 
 
 def process_burst_sentinel1_with_isce3_radar(burst_granule_ref, burst_granule_sec):
-    #download_burst(burst_granule_ref)
-    #download_burst(burst_granule_sec)
+    download_burst(burst_granule_ref)
+    download_burst(burst_granule_sec)
 
     safe_ref = sorted(glob.glob('./*.SAFE'))[0]
     safe_sec = sorted(glob.glob('./*.SAFE'))[1]
@@ -99,7 +100,7 @@ def process_burst_sentinel1_with_isce3_radar(burst_granule_ref, burst_granule_se
     lon_max, lat_max = np.max([lon1max, lon2max]), np.max([lat1max, lat2max])
 
     bounds = [lon_min, lat_min, lon_max, lat_max]
-    #download_dem(bounds)
+    download_dem(bounds)
 
     orbit_file_ref = fetch_for_scene(granule_ref, dir='./')
     orbit_file_ref = orbit_file_ref.name
@@ -160,8 +161,9 @@ def process_sentinel1_with_isce3_slc(slc_ref, slc_sec):
     download_dem(bounds)
 
     orbit_file_ref = fetch_for_scene(safe_ref, dir='./')
-
+    orbit_file_ref = orbit_file_ref.name
     orbit_file_sec = fetch_for_scene(safe_sec, dir='./')
+    orbit_file_sec = orbit_file_sec.name
 
     burst_ids_ref = get_burst_ids(safe_ref, orbit_file_ref)
     burst_ids_sec = get_burst_ids(safe_sec, orbit_file_sec)
