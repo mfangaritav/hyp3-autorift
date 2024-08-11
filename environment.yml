@@ -18,10 +18,12 @@ dependencies:
   - pytest
   - pytest-console-scripts
   - pytest-cov
+  - pytest-order
   - responses
   - setuptools>=61
   - setuptools_scm>=6.2
   # For running
+  - eigen
   - gdal>=3
   - h5netcdf
   - hyp3lib>=3,<4
@@ -31,9 +33,26 @@ dependencies:
   - boto3
   - matplotlib-base
   - netCDF4
-  - numpy<1.24 # https://github.com/isce-framework/isce2/pull/639
-  - pyproj
-  - requests
-  - scipy
+  - numpy>=1.20,<2.0
+  - pyproj>=3.3
+  - pysolid>=0.3
+  - requests>=2.0
+  - ruamel.yaml>=0.15
+  - scipy>=1.0,<1.13
+  - yamale>=4.0
+  - s1reader=0.2.2
+  - shapely>=2
+  - scikit-image
+  - xarray
+  - packaging>=21.0
+  - lxml>=4.8
+  - tifffile>=2024.0.0
+  - asf_search
+  - dateparser!=1.1.0
+  - dem_stitcher
+  - burst2safe #get the develop version so it doesn't look for iw2
+  - pandas>=1.4
+  - progressbar
+  - rasterio
   - xarray
   - s1_orbits
