@@ -1,4 +1,4 @@
-name: hyp3-autorift
+name: hyp3-autorift-radar
 channels:
   - hyp3
   - conda-forge
@@ -6,7 +6,7 @@ channels:
 dependencies:
   - boto3
   - botocore
-  - python>=3.9,<3.10  # Top pin to fix ISCE2 incompatibility: https://github.com/isce-framework/isce2/issues/458
+  - python>=3.9
   - pip
   # For packaging, and testing
   - build
@@ -27,8 +27,6 @@ dependencies:
   - gdal>=3
   - h5netcdf
   - hyp3lib>=3,<4
-  - isce2=2.6.1.dev7
-  - autorift=1.5.0
   - opencv
   - boto3
   - matplotlib-base
