@@ -36,4 +36,3 @@ dependencies:
   - requests
   - scipy
   - xarray
-  - s1_orbits
