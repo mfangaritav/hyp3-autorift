@@ -16,9 +16,9 @@ import s1reader
 from compass import s1_cslc
 from dem_stitcher import stitch_dem
 from hyp3lib.fetch import download_file
-from hyp3lib.get_orb import downloadSentinelOrbitFile
 from hyp3lib.scene import get_download_url
 from osgeo import gdal
+from s1_orbits import fetch_for_scene
 from s1reader import s1_info
 
 import hyp3_autorift
@@ -27,8 +27,6 @@ from hyp3_autorift.process import DEFAULT_PARAMETER_FILE
 from hyp3_autorift.vend.testGeogridOptical import coregisterLoadMetadata
 from hyp3_autorift.vend.testGeogrid_ISCE import getPol, loadMetadata, loadMetadataSlc, runGeogrid
 from hyp3_autorift.vend.testautoRIFT import generateAutoriftProduct
-
-ESA_HOST = 'dataspace.copernicus.eu'
 
 
 def process_burst_sentinel1_with_isce3(burst_granule_ref, burst_granule_sec):
@@ -52,10 +50,11 @@ def process_burst_sentinel1_with_isce3(burst_granule_ref, burst_granule_sec):
     bounds = [lon_min, lat_min, lon_max, lat_max]
     download_dem(bounds)
 
-    orbit_file, prov = downloadSentinelOrbitFile(granule_ref, esa_credentials)
-    orbit_file_ref = orbit_file
-    orbit_file, prov = downloadSentinelOrbitFile(granule_sec, esa_credentials)
-    orbit_file_sec = orbit_file
+    orbit_file_ref = fetch_for_scene(granule_ref, dir='./')
+    log.info(f'Downloaded orbit file {orbit_file_ref} from s1-orbits')
+
+    orbit_file_sec = fetch_for_scene(granule_sec, dir='./')
+    log.info(f'Downloaded orbit file {orbit_file_sec} from s1-orbits')
 
     burst_ids_ref = get_burst_ids(safe_ref, burst_granule_ref, orbit_file_ref)
     burst_ids_sec = get_burst_ids(safe_sec, burst_granule_sec, orbit_file_sec)
@@ -110,10 +109,11 @@ def process_burst_sentinel1_with_isce3_radar(burst_granule_ref, burst_granule_se
     bounds = [lon_min, lat_min, lon_max, lat_max]
     download_dem(bounds)
 
-    orbit_file, prov = downloadSentinelOrbitFile(granule_ref, esa_credentials=esa_credentials)
-    orbit_file_ref = orbit_file
-    orbit_file, prov = downloadSentinelOrbitFile(granule_sec, esa_credentials=esa_credentials)
-    orbit_file_sec = orbit_file
+    orbit_file_ref = fetch_for_scene(granule_ref, dir='./')
+    log.info(f'Downloaded orbit file {orbit_file_ref} from s1-orbits')
+
+    orbit_file_sec = fetch_for_scene(granule_sec, dir='./')
+    log.info(f'Downloaded orbit file {orbit_file_sec} from s1-orbits')
 
     burst_id_ref = get_burst_id(safe_ref, burst_granule_ref, orbit_file_ref)
     burst_id_sec = get_burst_id(safe_sec, burst_granule_sec, orbit_file_sec)
@@ -171,11 +171,11 @@ def process_sentinel1_with_isce3_slc(slc_ref, slc_sec):
     bounds = [lon_min, lat_min, lon_max, lat_max]
     download_dem(bounds)
 
-    orbit_file, prov = downloadSentinelOrbitFile(slc_ref, esa_credentials=esa_credentials)
-    orbit_file_ref = orbit_file
+    orbit_file_ref = fetch_for_scene(safe_ref, dir='./')
+    log.info(f'Downloaded orbit file {orbit_file_ref} from s1-orbits')
 
-    orbit_file, prov = downloadSentinelOrbitFile(slc_sec, esa_credentials=esa_credentials)
-    orbit_file_sec = orbit_file
+    orbit_file_sec = fetch_for_scene(safe_sec, dir='./')
+    log.info(f'Downloaded orbit file {orbit_file_sec} from s1-orbits')
 
     burst_ids_ref = get_burst_ids(safe_ref, orbit_file_ref)
     burst_ids_sec = get_burst_ids(safe_sec, orbit_file_sec)
@@ -592,7 +592,7 @@ def geocode_burst_temp(burst_granule_ref, index):
     safe_ref = sorted(glob.glob('./*.SAFE'))[index]
     granule_ref = os.path.basename(safe_ref).split('.')[0]
 
-    orbit_file_ref, provider_ref = downloadSentinelOrbitFile(granule_ref, esa_credentials=(esa_username, esa_password))
+    orbit_file_ref = fetch_for_scene(granule_ref, dir='./')
 
     str_burst_ids_ref = get_burst_ids(safe_ref, burst_granule_ref, orbit_file_ref)
 
@@ -610,7 +610,7 @@ def geocode_burst(burst_granule):
     bounds = get_bounds_dem(safe)
     download_dem(bounds)
     granule = os.path.basename(safe).split('.')[0]
-    orbit_file, provider = downloadSentinelOrbitFile(granule, esa_credentials=(esa_username, esa_password))
+    orbit_file = fetch_for_scene(granule, dir='./')
 
     str_burst_ids = get_burst_ids(safe, burst_granule, orbit_file)
     write_yaml(safe, orbit_file, str_burst_ids)
